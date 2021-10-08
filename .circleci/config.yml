@@ -1,0 +1,67 @@
+version: 2.1
+
+orbs:
+  codecov: codecov/codecov@1.2.2
+
+executors:
+  clojure:
+    docker:
+      - image: circleci/clojure:lein
+
+jobs:
+  clj-kondo:
+    docker:
+      - image: cljkondo/clj-kondo:2021.02.13
+    steps:
+      - checkout
+      - run: clj-kondo --lint .
+
+  test-deps-plus:
+    executor: clojure
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-jars-{{ checksum "project.clj" }}
+            - v1-jars
+      - run: lein test-ci
+      - run:
+          command: lein eastwood
+          when: always
+      - codecov/upload
+      - store_test_results:
+          path: target/test-results
+      - save_cache:
+          key: v1-jars-{{ checksum "project.clj" }}
+          paths:
+            - ~/.m2
+
+  publish:
+    docker:
+      - image: circleci/clojure:lein
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-jars-{{ checksum "project.clj" }}
+            - v1-jars
+      - run:
+          name: Download dependencies
+          command: lein deps
+      - run:
+          name: Publish to clojars
+          command: lein deploy
+
+workflows:
+  build-test:
+    jobs:
+      - clj-kondo
+      - test-deps-plus
+      - publish:
+          context: clojars-publish
+          requires:
+            - test-deps-plus
+          filters:
+            branches:
+              only:
+                - main

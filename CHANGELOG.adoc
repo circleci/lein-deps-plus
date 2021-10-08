@@ -1,0 +1,16 @@
+:toc:
+:toclevels: 1
+
+= Changelog
+
+All notable changes to this project are documented in this file.
+
+The format is based on https://keepachangelog.com/en/1.0.0/[Keep a Changelog].
+
+= 2021
+
+== 0.1.X - 2021-10-08
+
+=== Added
+
+* Initial release. All commits are squashed for safety reasons. The original repository lives in GitHub's CircleCI-Archived org.
