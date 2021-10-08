@@ -1,0 +1,7 @@
+fixture:changed-classifier:jar:sources:1.0:compile
+fixture:changed-extension:tar.gz:1.0:compile
+fixture:changed-scope:jar:1.0:test
+fixture:downgraded:jar:1.0:compile
+fixture:removed:jar:1.0:compile
+fixture:unmodified:jar:1.0:compile
+fixture:upgraded:jar:1.0:compile
