@@ -56,16 +56,12 @@ workflows:
   build-test:
     jobs:
       - clj-kondo
-      - test-deps-plus:
-          filters:
-            tags:
-              only: /.*/
+      - test-deps-plus
       - publish:
           context: clojars-publish
           requires:
             - test-deps-plus
           filters:
-            tags:
-              only: /.*/
             branches:
-              ignore: /.*/
+              only:
+                - main

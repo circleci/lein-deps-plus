@@ -1,4 +1,4 @@
-(defproject com.circleci/deps-plus "0.1.0"
+(defproject com.circleci/deps-plus "0.1.0-SNAPSHOT"
   :plugins [[jonase/eastwood "0.3.6" :exclusions [org.clojure/clojure]]]
 
   :pedantic? :abort

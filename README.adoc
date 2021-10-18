@@ -4,11 +4,11 @@ deps-plus is a Leiningen plugin designed to help with analyzing project dependen
 
 == Installation
 
-Add `+[com.circleci/deps-plus "0.1.0"]+` to your `+:user+` profile plugins in `+~/.lein/profiles.clj+`. For example,
+Add `+[com.circleci/deps-plus "0.1.0-SNAPSHOT"]+` to your `+:user+` profile plugins in `+~/.lein/profiles.clj+`. For example,
 
 [source,clj]
 ....
-{:user {:plugins [[com.circleci/deps-plus "0.1.0"]]}}
+{:user {:plugins [[com.circleci/deps-plus "0.1.0-SNAPSHOT"]]}}
 ....
 
 == Usage
@@ -246,17 +246,15 @@ bottom of the dependency knot.  It's also the version that the project explicitl
 Releasing
 ---------
 
-New git tags are automatically published to Clojars. To find the most recent version of lein-deps-plus, look at the most recent tag in Clojars.
+deps-plus is pushed to https://clojars.org/com.circleci/deps-plus[clojars.org] as a SNAPSHOT release.
 
-The following should be updated on the `main` branch before tagging:
+Bump the version *only* when backwards-incompatible changes are made.
+
+The following should be updated on the `main` branch if there are new releases:
 
 - `project.clj` - version
+- `README.adoc` - dependency coordinates
 - `CHANGELOG.adoc` - summary of changes
-
-Using semantic versioning is recommended, increment the:
-1. MAJOR version when you make backward incompatible changes.
-2. MINOR version when you add user-facing features in a backward compatible manner.
-3. PATCH version when you make backward compatible bug fixes.
 
 License
 -------
