@@ -10,8 +10,8 @@
                                   [lambdaisland/kaocha-cloverage "0.0-41"]
                                   [lambdaisland/kaocha-junit-xml "0.0-70"]]}
              :provided {:dependencies [[org.clojure/clojure]
-                                       [com.google.guava/guava "24.1.1-jre"]
-                                       [org.jsoup/jsoup "1.9.2"]
+                                       [com.google.guava/guava "30.0-jre"]
+                                       [org.jsoup/jsoup "1.14.2"]
                                        [leiningen/leiningen "2.9.1"]]}}
 
   :aliases {"test"    ["run" "-m" "kaocha.runner"]
