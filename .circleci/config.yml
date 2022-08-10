@@ -1,8 +1,5 @@
 version: 2.1
 
-orbs:
-  codecov: codecov/codecov@1.2.2
-
 executors:
   clojure:
     docker:
@@ -28,9 +25,10 @@ jobs:
       - run:
           command: lein eastwood
           when: always
-      - codecov/upload
       - store_test_results:
           path: target/test-results
+      - store_artifacts:
+          path: "target/coverage"
       - save_cache:
           key: v1-jars-{{ checksum "project.clj" }}
           paths:
