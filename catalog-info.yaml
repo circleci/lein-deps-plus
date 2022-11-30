@@ -1,0 +1,16 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: lein-deps-plus
+  description: deps-plus is a Leiningen plugin designed to help with analyzing project dependencies and reviewing dependency changes.
+  annotations:
+    circleci.com/project-slug: github/circleci/lein-deps-plus
+    snyk.io/org-name: circleci-78h
+  links:
+    - title: Documentation
+      url: https://github.com/circleci/lein-deps-plus#deps-plus-plugin
+      icon: docs
+spec:
+  type: tool
+  lifecycle: production
+  owner: backplane
