@@ -10,3 +10,4 @@ pom.xml.asc
 .eastwood
 .clj-kondo/.cache
 .idea/
+.git/
