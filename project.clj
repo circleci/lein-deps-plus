@@ -1,18 +1,18 @@
 (defproject com.circleci/deps-plus "0.1.0-SNAPSHOT"
-  :plugins [[jonase/eastwood "0.3.6" :exclusions [org.clojure/clojure]]]
+  :plugins [[jonase/eastwood "1.4.3" :exclusions [org.clojure/clojure]]]
 
   :pedantic? :abort
 
   :managed-dependencies [[org.clojure/clojure "1.10.1"]]
 
   :profiles {:dev {:dependencies [[org.clojure/clojure]
-                                  [lambdaisland/kaocha "0.0-601"]
-                                  [lambdaisland/kaocha-cloverage "0.0-41"]
-                                  [lambdaisland/kaocha-junit-xml "0.0-70"]]}
+                                  [lambdaisland/kaocha "1.91.1392"]
+                                  [lambdaisland/kaocha-cloverage "1.1.89"]
+                                  [lambdaisland/kaocha-junit-xml "1.17.101"]]}
              :provided {:dependencies [[org.clojure/clojure]
-                                       [com.google.guava/guava "30.0-jre"]
-                                       [org.jsoup/jsoup "1.14.2"]
-                                       [leiningen/leiningen "2.9.1"]]}}
+                                       [com.google.guava/guava "32.0.1-jre"]
+                                       [org.jsoup/jsoup "1.15.3"]
+                                       [leiningen/leiningen "2.11.2" :exclusions [nrepl org.slf4j/slf4j-api]]]}}
 
   :aliases {"test"    ["run" "-m" "kaocha.runner"]
             "test-ci" ["test"
