@@ -20,7 +20,6 @@ jobs:
       - restore_cache:
           keys:
             - v1-jars-{{ checksum "project.clj" }}
-            - v1-jars
       - run: lein test-ci
       - run:
           command: lein eastwood
