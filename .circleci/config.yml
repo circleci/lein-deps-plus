@@ -3,7 +3,7 @@ version: 2.1
 executors:
   clojure:
     docker:
-      - image: circleci/clojure:lein
+      - image: cimg/clojure:1.11
 
 jobs:
   clj-kondo:
@@ -35,8 +35,7 @@ jobs:
             - ~/.m2
 
   publish:
-    docker:
-      - image: circleci/clojure:lein
+    executor: clojure
     steps:
       - checkout
       - restore_cache:
