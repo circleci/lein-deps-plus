@@ -21,9 +21,6 @@ jobs:
           keys:
             - v1-jars-{{ checksum "project.clj" }}
       - run: lein test-ci
-      - run:
-          command: lein eastwood
-          when: always
       - store_test_results:
           path: target/test-results
       - store_artifacts:

@@ -7,6 +7,5 @@ pom.xml.asc
 *.class
 .lein-*
 .nrepl-port
-.eastwood
 .clj-kondo/.cache
 .idea/

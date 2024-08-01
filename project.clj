@@ -1,6 +1,4 @@
 (defproject com.circleci/deps-plus "0.1.0-SNAPSHOT"
-  :plugins [[jonase/eastwood "1.4.3" :exclusions [org.clojure/clojure]]]
-
   :pedantic? :abort
 
   :managed-dependencies [[org.clojure/clojure "1.10.1"]]
