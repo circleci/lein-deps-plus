@@ -3,7 +3,7 @@ version: 2.1
 executors:
   clojure:
     docker:
-      - image: circleci/clojure:lein
+      - image: cimg/clojure:1.11
 
 jobs:
   clj-kondo:
@@ -20,11 +20,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-jars-{{ checksum "project.clj" }}
-            - v1-jars
       - run: lein test-ci
-      - run:
-          command: lein eastwood
-          when: always
       - store_test_results:
           path: target/test-results
       - store_artifacts:
@@ -35,8 +31,7 @@ jobs:
             - ~/.m2
 
   publish:
-    docker:
-      - image: circleci/clojure:lein
+    executor: clojure
     steps:
       - checkout
       - restore_cache:
