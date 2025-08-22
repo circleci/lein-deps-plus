@@ -249,10 +249,19 @@
         project (project/merge-profiles project [{:dependencies dependencies}])]
     (lein/resolve-and-apply project args)))
 
+(defn check-forbidden-dependencies
+  "Checks dependencies to ensure none of them are listed in :forbidden-dependencies."
+  [project]
+  (when-let [forbidden-deps (deps/check-forbidden-dependencies project)]
+    (doseq [dep forbidden-deps]
+      (lein/warn "[ERROR] Forbidden dependency:" dep))
+    (lein/exit 1)))
+
 (defn deps-plus
   "Extra tasks for analyzing dependencies"
   {:subtasks [#'list #'list-save #'list-diff #'check-downgraded #'check-families #'check-pedantic
-              #'check-management-conflicts #'check-classpath-conflicts #'why #'who-shades]}
+              #'check-management-conflicts #'check-classpath-conflicts #'why #'who-shades
+              #'check-forbidden-dependencies]}
   [project & [sub-task & args]]
   (let [project (project/unmerge-profiles project [:base :user])]
     (case sub-task
@@ -261,6 +270,7 @@
       "list-diff" (list-diff project)
       "check-downgraded" (check-downgraded project)
       "check-families" (check-families project)
+      "check-forbidden-dependencies" (check-forbidden-dependencies project)
       "check-pedantic" (apply check-pedantic project args)
       "check-management-conflicts" (check-management-conflicts project)
       "check-classpath-conflicts" (check-classpath-conflicts project)
