@@ -512,3 +512,31 @@
          acc))
      {}
      dep-files)))
+
+(defn- forbidden-dependencies
+  [project]
+  (some->> project
+           :forbidden-dependencies
+           seq
+           (map (fn [sym]
+                  (let [x (namespace sym)
+                        y (name sym)]
+                    (if x
+                      (symbol x y)
+                      (symbol y y)))))
+           set))
+
+(defn check-forbidden-dependencies
+  "Return a set of any dependencies from the dependency tree that are also
+   listed in :forbidden-dependencies."
+  [project]
+  (when-let [forbidden (forbidden-dependencies project)]
+    (let [deps (resolve-dependencies project)]
+      (some->> (concat (keys deps)
+                       (apply concat (vals deps)))
+               (filter some?)
+               (map (fn [{:keys [group-id artifact-id]}]
+                      (symbol group-id artifact-id)))
+               (filter forbidden)
+               seq
+               set))))

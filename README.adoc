@@ -27,6 +27,7 @@ To run a deps-plus task simply run `+lein deps-plus <task name>+` from a Leining
 * link:#check-classpath-conflicts[*check-classpath-conflicts*] - Checks for classpath conflicts.
 * link:#check-downgraded[*check-downgraded*] - Checks for dependencies which have been downgraded.
 * link:#check-families[*check-families*] - Checks for inconsistent dependency versions within families.
+* link:#check-forbidden-dependencies[*check-forbidden-dependencies*] - Checks dependencies to ensure none of them are listed in :forbidden-dependencies.
 * link:#check-management-conflicts[*check-management-conflicts*] - Checks for dependency management conflicts.
 * link:#check-pedantic[*check-pedantic*] - Checks for version conflicts and version ranges.
 
@@ -143,6 +144,24 @@ suspicious combinations that has the _undesired_ version, add an entry in the `:
 ....
 
 For completeness, you can add _every_ member of the family the project uses to managed dependencies.
+
+==== check-forbidden-dependencies
+
+A dependency is considered "forbidden" if it's listed at the `:forbidden-dependencies` key in
+`project.clj`. While it's possible to use a global `:exclusions` to remove a dependency from the
+dependency tree, Leiningen copies those exclusions into every dependency reference. If that list
+becomes sufficiently large then Leiningen begins to struggle. Even with relatively small amounts of
+items in `:exclusions` it can clutter `lein deps :tree` output to the point of unreadability.
+
+[source,clj]
+....
+  :forbidden-dependencies [io.grpc/grpc-all] ; Force specific gRPC dependencies
+....
+
+....
+$ lein deps-plus check-forbidden-dependencies
+[ERROR] Forbidden dependency: io.grpc/grpc-all
+....
 
 ==== check-management-conflicts
 
