@@ -272,3 +272,12 @@
           target  (deps/parse-coordinates "super-fake:so-fake:jar:what-big-versions")
           result  (deps/who-shades* project target)]
       (is (empty? result)))))
+
+(deftest check-forbidden-dependencies
+  (testing "When there are no forbidden dependencies"
+    (let [project (lein-project/read "test-projects/shaded-dependencies.clj")]
+      (is (nil? (deps/check-forbidden-dependencies project)))))
+  (testing "When there are forbidden dependencies"
+    (let [project (lein-project/read "test-projects/forbidden-dependencies.clj")]
+      (is (= #{'com.taoensso/nippy 'io.netty/netty-common}
+             (deps/check-forbidden-dependencies project))))))
