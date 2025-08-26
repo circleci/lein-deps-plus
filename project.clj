@@ -1,4 +1,7 @@
 (defproject com.circleci/deps-plus "0.1.0-SNAPSHOT"
+  :license {:name "Eclipse Public License 1.0"
+            :url "https://github.com/circleci/lein-deps-plus/blob/main/LICENSE"
+            :distribution :repo}
   :pedantic? :abort
 
   :managed-dependencies [[org.clojure/clojure "1.10.1"]]
