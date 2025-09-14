@@ -13,7 +13,7 @@
              :provided {:dependencies [[org.clojure/clojure]
                                        [com.google.guava/guava "32.0.1-jre"]
                                        [org.jsoup/jsoup "1.15.3"]
-                                       [leiningen/leiningen "2.11.2" :exclusions [nrepl org.slf4j/slf4j-api]]]}}
+                                       [leiningen/leiningen "2.12.0" :exclusions [nrepl org.slf4j/slf4j-api]]]}}
 
   :aliases {"test"    ["run" "-m" "kaocha.runner"]
             "test-ci" ["test"
