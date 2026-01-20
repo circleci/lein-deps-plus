@@ -14,7 +14,7 @@
 
 (deftest check-families-tests
   (testing "check-families*"
-    (let [project (lein-project/read "test-projects/family-mismatch.clj")
+    (let [project (lein-project/read "test-projects/family-mismatch/project.clj")
           problems (into [] (deps/check-families* project))
           [parent child] (first problems)]
       (is (= 1 (count problems)))
@@ -25,7 +25,7 @@
 
 (deftest check-downgraded-tests
   (testing "check-downgraded*"
-    (let [project (lein-project/read "test-projects/downgrade.clj")
+    (let [project (lein-project/read "test-projects/downgrade/project.clj")
           problems (into [] (deps/check-downgraded* project))
           [dep max-version] (first problems)]
       (is (= 1 (count problems)))
@@ -88,7 +88,7 @@
       (is (= "provided" (:scope (meta coord)))))))
 
 (deftest write-dependency-list
-  (let [project (lein-project/read "test-projects/dependency-list.clj" [])
+  (let [project (lein-project/read "test-projects/dependency-list/project.clj" [])
         buffer (StringWriter.)
         _ (deps/write-dependency-list project buffer)
         lines (str/split-lines (str buffer))]
@@ -96,8 +96,8 @@
     (is (= "io.grpc:grpc-context:jar:1.20.0:compile" (second lines)))))
 
 (deftest diff-dependency-list
-  (let [project (lein-project/read "test-projects/dependency-diff.clj" [])
-        list (slurp "test-projects/dependency-diff.list")
+  (let [project (lein-project/read "test-projects/dependency-diff/project.clj" [])
+        list (slurp "test-projects/dependency-diff/list")
         buffer (StringWriter.)
         _ (deps/diff-dependency-list project list buffer)
         lines (str/split-lines (str buffer))]
@@ -121,7 +121,7 @@
             "fixture:changed-scope:jar:1.0:compile (test -> compile)"]
            lines)))
   (testing "empty sections aren't included"
-    (let [project (lein-project/read "test-projects/dependency-diff.clj" [])
+    (let [project (lein-project/read "test-projects/dependency-diff/project.clj" [])
           buffer (StringWriter.)
           _ (deps/diff-dependency-list project "" buffer)
           out (str buffer)]
@@ -131,13 +131,13 @@
 
 (deftest find-pedantic-conflicts-tests
   (testing "version conflict"
-    (let [project (lein-project/read "test-projects/pedantic-version-conflict.clj" [])
+    (let [project (lein-project/read "test-projects/pedantic-version-conflict/project.clj" [])
           conflicts (deps/find-pedantic-conflicts project)]
       (is (= 1 (count conflicts)))
       (is (= "io.grpc:grpc-core:jar:1.19.0:compile" (str (first (first conflicts)))))))
 
   (testing "version range"
-    (let [project (lein-project/read "test-projects/pedantic-range.clj" [])
+    (let [project (lein-project/read "test-projects/pedantic-range/project.clj" [])
           conflicts (deps/find-pedantic-conflicts project)]
       (is (= 1 (count conflicts)))
       (is (= "io.grpc:grpc-core:jar:1.19.0:compile" (str (first (first conflicts))))))))
@@ -179,7 +179,7 @@
 
 (deftest check-management-conflicts-tests
   (testing "management conflict"
-    (let [project (lein-project/read "test-projects/management-conflict.clj" [])
+    (let [project (lein-project/read "test-projects/management-conflict/project.clj" [])
           conflicts (deps/check-management-conflicts* project)]
       (is (= 1 (count conflicts)))
       (let [[dep managed] (first conflicts)]
@@ -188,7 +188,7 @@
 
 (deftest resolve-dependencies
   (testing "standard resolution includes ranges"
-    (let [project (lein-project/read "test-projects/pedantic-range.clj" [])
+    (let [project (lein-project/read "test-projects/pedantic-range/project.clj" [])
           resolved (deps/resolve-dependencies project)
           grpc-cores (->> (vals resolved)
                           (mapcat identity)
@@ -199,7 +199,7 @@
       (is (= "[1.19.0,1.19.0]" (str (:version-range (meta (first grpc-cores))))))))
 
   (testing "full-graph resolution includes ranges"
-      (let [project (lein-project/read "test-projects/pedantic-range.clj" [])
+      (let [project (lein-project/read "test-projects/pedantic-range/project.clj" [])
             resolved (deps/resolve-dependencies project :full-graph)
             grpc-cores (->> (vals resolved)
                             (mapcat identity)
@@ -209,7 +209,7 @@
         (is (< 0 (count (remove (comp :version-range meta) grpc-cores))))))
 
   (testing "standard resolution includes premanaged version"
-    (let [project (lein-project/read "test-projects/downgrade.clj" [])
+    (let [project (lein-project/read "test-projects/downgrade/project.clj" [])
           resolved (deps/resolve-dependencies project)
           gson (->> (keys resolved)
                     (filter #(= "gson" (:artifact-id %)))
@@ -219,7 +219,7 @@
       (is (= "2.7" (str (:premanaged-version (meta gson)))))))
 
   (testing "full-graph resolution includes premanaged version"
-    (let [project (lein-project/read "test-projects/downgrade.clj" [])
+    (let [project (lein-project/read "test-projects/downgrade/project.clj" [])
           resolved (deps/resolve-dependencies project :full-graph)
           gson (->> (keys resolved)
                     (filter #(= "gson" (:artifact-id %)))
@@ -229,7 +229,7 @@
       (is (= "2.7" (str (:premanaged-version (meta gson))))))))
 
 (deftest check-classpath-conflicts-test
-  (let [project (lein-project/read "test-projects/classpath-conflict.clj" [])
+  (let [project (lein-project/read "test-projects/classpath-conflict/project.clj" [])
         conflicts (deps/check-classpath-conflicts* project)
         conflicting-deps (get conflicts "com/google/common/base/Preconditions.class")]
     (is (= 2 (count conflicting-deps)))
@@ -237,7 +237,7 @@
 
 (deftest who-shades
   (testing "dependency only appearing as shaded"
-    (let [project (lein-project/read "test-projects/shaded-dependencies.clj" [])
+    (let [project (lein-project/read "test-projects/shaded-dependencies/project.clj" [])
           target  (deps/parse-coordinates "commons-codec:commons-codec")
           result  (deps/who-shades* project target)]
       (is (= 1 (count result)))
@@ -248,7 +248,7 @@
   ;; This case validates that who-shades does not return self
   ;; matches (e.g. netty-common does not shade itself).
   (testing "dependency appearing as both shaded and standalone"
-    (let [project (lein-project/read "test-projects/shaded-dependencies.clj" [])
+    (let [project (lein-project/read "test-projects/shaded-dependencies/project.clj" [])
           target  (deps/parse-coordinates "io.netty:netty-common")
           result  (deps/who-shades* project target)]
       (is (= 1 (count result)))
@@ -259,7 +259,7 @@
   ;; This behavior could be changed, but at least at the moment the version
   ;; number in the target is ignored.
   (testing "dependency only appearing as shaded"
-    (let [project (lein-project/read "test-projects/shaded-dependencies.clj" [])
+    (let [project (lein-project/read "test-projects/shaded-dependencies/project.clj" [])
           target  (deps/parse-coordinates "commons-codec:commons-codec:jar:1.2.3")
           result  (deps/who-shades* project target)]
       (is (= 1 (count result)))
@@ -268,16 +268,16 @@
         (is (= "commons-codec:commons-codec:jar:1.9" (str shadee))))))
 
   (testing "no matches"
-    (let [project (lein-project/read "test-projects/shaded-dependencies.clj" [])
+    (let [project (lein-project/read "test-projects/shaded-dependencies/project.clj" [])
           target  (deps/parse-coordinates "super-fake:so-fake:jar:what-big-versions")
           result  (deps/who-shades* project target)]
       (is (empty? result)))))
 
 (deftest check-forbidden-dependencies
   (testing "When there are no forbidden dependencies"
-    (let [project (lein-project/read "test-projects/shaded-dependencies.clj")]
+    (let [project (lein-project/read "test-projects/shaded-dependencies/project.clj")]
       (is (nil? (deps/check-forbidden-dependencies project)))))
   (testing "When there are forbidden dependencies"
-    (let [project (lein-project/read "test-projects/forbidden-dependencies.clj")]
+    (let [project (lein-project/read "test-projects/forbidden-dependencies/project.clj")]
       (is (= #{'com.taoensso/nippy 'io.netty/netty-common}
              (deps/check-forbidden-dependencies project))))))
