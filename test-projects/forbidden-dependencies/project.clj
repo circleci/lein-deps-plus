@@ -1,6 +1,6 @@
 (defproject deps-plus-tests/forbidden-dependencies "0-SNAPSHOT"
-  :managed-dependencies [[io.grpc/grpc-all "1.70.0"]
-                         [io.netty/netty-all "4.1.118.Final"]]
+  :managed-dependencies [[io.grpc/grpc-all "1.78.0"]
+                         [io.netty/netty-all "4.2.9.Final"]]
   :dependencies [[com.taoensso/nippy "3.6.0"]
                  [io.netty/netty-all]]
   :forbidden-dependencies [com.taoensso/nippy      ; Banned direct dependency
