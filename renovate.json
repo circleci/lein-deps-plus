@@ -4,6 +4,7 @@
   "separateMajorMinor": false,
   "labels": ["renovate"],
   "groupName": "uncategorized",
+  "ignorePaths": ["test-projects/**"],
   "packageRules": [
     {
       "matchDatasources": ["clojure"],
