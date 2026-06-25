@@ -281,3 +281,26 @@
     (let [project (lein-project/read "test-projects/forbidden-dependencies/project.clj")]
       (is (= #{'com.taoensso/nippy 'io.netty/netty-common}
              (deps/check-forbidden-dependencies project))))))
+
+(deftest write-graphviz-dag
+  (let [project (lein-project/read "test-projects/management-conflict/project.clj" [])
+        buffer (StringWriter.)
+        _ (deps/write-graphviz-dag project buffer)
+        output (str buffer)
+        lines (str/split-lines output)]
+    (is (= ["digraph {"
+            "  \"deps-plus-tests/management-conflict\" -> \"io.grpc:grpc-api:1.22.0\";"
+            "  \"deps-plus-tests/management-conflict\" -> \"io.grpc:grpc-core:1.21.0\";"
+            "  \"com.google.guava:guava:26.0-android\" -> \"com.google.j2objc:j2objc-annotations:1.1\";"
+            "  \"com.google.guava:guava:26.0-android\" -> \"org.checkerframework:checker-compat-qual:2.5.2\";"
+            "  \"io.grpc:grpc-api:1.22.0\" -> \"com.google.code.findbugs:jsr305:3.0.2\";"
+            "  \"io.grpc:grpc-api:1.22.0\" -> \"com.google.errorprone:error_prone_annotations:2.3.2\";"
+            "  \"io.grpc:grpc-api:1.22.0\" -> \"com.google.guava:guava:26.0-android\";"
+            "  \"io.grpc:grpc-api:1.22.0\" -> \"io.grpc:grpc-context:1.22.0\";"
+            "  \"io.grpc:grpc-api:1.22.0\" -> \"org.codehaus.mojo:animal-sniffer-annotations:1.17\";"
+            "  \"io.grpc:grpc-core:1.21.0\" -> \"com.google.android:annotations:4.1.1.4\";"
+            "  \"io.grpc:grpc-core:1.21.0\" -> \"com.google.code.gson:gson:2.7\";"
+            "  \"io.grpc:grpc-core:1.21.0\" -> \"io.opencensus:opencensus-api:0.21.0\";"
+            "  \"io.grpc:grpc-core:1.21.0\" -> \"io.opencensus:opencensus-contrib-grpc-metrics:0.21.0\";"
+            "}"]
+           lines))))
