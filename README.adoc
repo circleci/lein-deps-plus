@@ -21,6 +21,7 @@ To run a deps-plus task simply run `+lein deps-plus <task name>+` from a Leining
 * *list-save* - Save the project dependency list to "deps.list".
 * *list-diff* - Compare project dependencies to those previously saved with `+list-save+`.
 * *why* - Shows all paths to given dependency as a tree. This is similar to `+lein deps :why+`, but instead of only showing the single resolved path to dependency chosen by Maven, all copies and paths to the dependency (including those excluded by conflict resolution) are shown.
+* *graphviz* - Emits a https://graphviz.org/[GraphViz] DAG of the project's resolved dependencies in DOT format. Pipe the output to a GraphViz tool to render it, e.g. `+lein deps-plus graphviz | dot -Tsvg -o deps.svg+`.
 
 === Checks
 

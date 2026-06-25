@@ -235,6 +235,11 @@
     (doseq [[dep target-version] (deps/who-shades* project target)]
       (println (str dep) "shades" (str target-version)))))
 
+(defn- graphviz
+  "Emits a GraphViz DAG for the project dependencies."
+  [project]
+  (deps/write-graphviz-dag project *out*))
+
 (defn- error [project message]
   (lein/warn "[ERROR]" message "\n")
   (lein/resolve-and-apply project ["help" "deps-plus"])
@@ -261,7 +266,7 @@
   "Extra tasks for analyzing dependencies"
   {:subtasks [#'list #'list-save #'list-diff #'check-downgraded #'check-families #'check-pedantic
               #'check-management-conflicts #'check-classpath-conflicts #'why #'who-shades
-              #'check-forbidden-dependencies]}
+              #'check-forbidden-dependencies #'graphviz]}
   [project & [sub-task & args]]
   (let [project (project/unmerge-profiles project [:base :user])]
     (case sub-task
@@ -276,6 +281,7 @@
       "check-classpath-conflicts" (check-classpath-conflicts project)
       "why" (apply why project args)
       "who-shades" (apply who-shades project args)
+      "graphviz" (graphviz project)
       "with-managed-deps" (with-managed-deps project args)
       ;; Leiningen is supposed to translate "lein <task> help" into
       ;; "lein help <task>" by default. For some reason it does not

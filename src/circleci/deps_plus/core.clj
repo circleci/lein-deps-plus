@@ -252,6 +252,22 @@
     (.write writer (str dep "\n")))
   (.flush writer))
 
+(defn write-graphviz-dag
+  [project ^Writer writer]
+  (let [deps (resolve-dependencies project)
+        project-label (str (:group project) "/" (:name project))
+        node-id (fn [dep]
+                  (if dep
+                    (format "\"%s:%s:%s\"" (:group-id dep) (:artifact-id dep) (:version dep))
+                    (format "\"%s\"" project-label)))]
+    (.write writer "digraph {\n")
+    (doseq [[parent children] (sort-by #(str (key %)) deps)
+            child (sort-by str children)
+            :when child]
+      (.write writer (format "  %s -> %s;\n" (node-id parent) (node-id child))))
+    (.write writer "}\n")
+    (.flush writer)))
+
 (defn- parse-dependency-list [s]
   (when (seq s)
     (->> (string/split-lines s)

@@ -7,6 +7,12 @@ All notable changes to this project are documented in this file.
 
 The format is based on https://keepachangelog.com/en/1.0.0/[Keep a Changelog].
 
+= 2026
+== 2026-06-25
+=== Added
+
+* Added the `graphviz` subcommand, which emits a GraphViz DAG of the project's resolved dependencies in DOT format
+
 = 2025
 == 2025-08-22
 === Added
