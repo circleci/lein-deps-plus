@@ -1,6 +1,6 @@
 {
   "extends": ["config:recommended"],
-  "schedule": "on sunday",
+  "automerge": true,
   "separateMajorMinor": false,
   "labels": ["renovate"],
   "groupName": "uncategorized",
