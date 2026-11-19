@@ -1,5 +1,8 @@
 version: 2.1
 
+functions:
+  setup-java: github.com/circleci-functions/setup-java@v0.4.0
+
 executors:
   clojure:
     docker:
@@ -17,27 +20,23 @@ jobs:
     executor: clojure
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-jars-{{ checksum "project.clj" }}
+      - setup-java/cache-dependencies:
+          with:
+            build-tool: lein
       - run: lein test-ci
       - store_test_results:
           path: target/test-results
       - store_artifacts:
           path: "target/coverage"
-      - save_cache:
-          key: v1-jars-{{ checksum "project.clj" }}
-          paths:
-            - ~/.m2
 
   publish:
     executor: clojure
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-jars-{{ checksum "project.clj" }}
-            - v1-jars
+      - setup-java/cache-dependencies:
+          with:
+            build-tool: lein
+            cache-read-only: true
       - run:
           name: Download dependencies
           command: lein deps
